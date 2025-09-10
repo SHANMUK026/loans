@@ -41,7 +41,10 @@ export class LoginComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
+        console.log('🔍 Login - Response received:', response);
+        console.log('🔍 Login - Token received:', response.token);
         this.authService.setToken(response.token);
+        console.log('🔍 Login - Token stored in localStorage:', localStorage.getItem('token'));
         this.loading = false;
         
         if (response.role === 'BORROWER') {

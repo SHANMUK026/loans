@@ -25,7 +25,7 @@ export class LenderDashboardComponent implements OnInit {
     minimumCreditScore: 0,
     minimumAge: 0,
     maximumAge: 0,
-    employmentTypes: 'FULL_TIME',
+    employmentTypes: 'SALARIED',
     ruleStatus: 'ACTIVE'
   };
 
@@ -67,17 +67,35 @@ export class LenderDashboardComponent implements OnInit {
     this.isCreatingRule = true;
     this.error = '';
 
-    this.rulesService.createRule(this.newRule).subscribe({
-      next: (response) => {
-        this.isCreatingRule = false;
-        this.loadMyRules();
-        this.resetRuleForm();
-      },
-      error: (error) => {
-        this.error = 'Failed to create rule';
-        this.isCreatingRule = false;
-      }
-    });
+    if (this.editingRuleId) {
+      // Update existing rule
+      this.rulesService.updateRule(this.editingRuleId, this.newRule).subscribe({
+        next: (response) => {
+          this.isCreatingRule = false;
+          this.loadMyRules();
+          this.clearForm();
+          this.error = '';
+        },
+        error: (error) => {
+          this.error = 'Failed to update rule';
+          this.isCreatingRule = false;
+        }
+      });
+    } else {
+      // Create new rule
+      this.rulesService.createRule(this.newRule).subscribe({
+        next: (response) => {
+          this.isCreatingRule = false;
+          this.loadMyRules();
+          this.clearForm();
+          this.error = '';
+        },
+        error: (error) => {
+          this.error = 'Failed to create rule';
+          this.isCreatingRule = false;
+        }
+      });
+    }
   }
 
   
@@ -90,7 +108,7 @@ export class LenderDashboardComponent implements OnInit {
       minimumCreditScore: 0,
       minimumAge: 0,
       maximumAge: 0,
-      employmentTypes: 'FULL_TIME',
+      employmentTypes: 'SALARIED',
       ruleStatus: 'ACTIVE'
     };
   }

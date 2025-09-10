@@ -58,6 +58,13 @@ export class BorrowerDashboardComponent implements OnInit {
       return;
     }
 
+    // Validate salary is a valid number
+    const salary = Number(this.salary);
+    if (isNaN(salary) || salary <= 0) {
+      this.error = 'Please enter a valid salary amount';
+      return;
+    }
+
     this.loading = true;
     this.error = '';
 
@@ -66,7 +73,8 @@ export class BorrowerDashboardComponent implements OnInit {
       loanPurpose: this.loanPurpose,
       employmentStatus: this.employmentStatus,
       creditScore: this.creditScore,
-      age: this.age
+      age: this.age,
+      salary: salary
     };
 
     this.borrowerService.createRequest(requestData).subscribe({
@@ -86,7 +94,18 @@ export class BorrowerDashboardComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.loanService.getEligibleLenders(requestId, this.salary).subscribe({
+    // Find the specific request
+    const request = this.myRequests.find(req => req.id === requestId);
+    if (!request) {
+      this.error = 'Request not found';
+      this.loading = false;
+      return;
+    }
+
+    console.log('🔍 BorrowerDashboard - Finding lenders for request:', requestId);
+
+    // API no longer requires salary parameter - backend will get it from request data
+    this.loanService.getEligibleLenders(requestId, 0).subscribe({
       next: (lenders) => {
         this.eligibleLenders = lenders;
         this.showLenders = true;

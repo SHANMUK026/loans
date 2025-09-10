@@ -5,6 +5,7 @@ export interface CreateRequest {
   employmentStatus: string;
   creditScore: number;
   age: number;
+  salary: number;
 }
 
 export interface RequestResponse {
@@ -14,4 +15,5 @@ export interface RequestResponse {
   employmentStatus: string;
   creditScore: number;
   age: number;
+  salary: number;
 }

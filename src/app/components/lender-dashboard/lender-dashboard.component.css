@@ -110,6 +110,24 @@
   padding: 2rem;
 }
 
+/* Error Message Styles */
+.error-message {
+  background: #fed7d7;
+  color: #742a2a;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border: 2px solid #feb2b2;
+}
+
+.error-message i {
+  font-size: 1.2rem;
+}
+
 /* Form Styles */
 .rule-form {
   display: flex;
