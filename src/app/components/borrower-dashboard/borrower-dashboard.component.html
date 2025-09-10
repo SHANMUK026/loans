@@ -1,0 +1,358 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <span>LoanEligibility</span>
+        </div>
+        <h1>Borrower Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <div class="user-info">
+          <div class="user-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <span>Borrower</span>
+        </div>
+        <button class="logout-btn" (click)="logout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16,17 21,12 16,7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <!-- Create Request Section -->
+    <section class="create-request-section">
+      <div class="section-header">
+        <h2>Create New Loan Request</h2>
+        <p>Fill in your details to find the best loan options</p>
+      </div>
+      
+      <div class="request-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="loanAmount">Loan Amount *</label>
+            <div class="input-wrapper">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <input 
+                type="number" 
+                id="loanAmount" 
+                [(ngModel)]="loanAmount" 
+                name="loanAmount"
+                placeholder="Enter loan amount"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="loanPurpose">Loan Purpose *</label>
+            <div class="input-wrapper">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                </svg>
+              </div>
+              <select 
+                id="loanPurpose" 
+                [(ngModel)]="loanPurpose" 
+                name="loanPurpose"
+                class="select-input"
+                required
+              >
+                <option value="">Select purpose</option>
+                <option value="HOME">Home Purchase</option>
+                <option value="CAR">Car Purchase</option>
+                <option value="EDUCATION">Education</option>
+                <option value="BUSINESS">Business</option>
+                <option value="PERSONAL">Personal</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="employmentStatus">Employment Status *</label>
+            <div class="input-wrapper">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 13.255A23.931 23.931 0 0 1 12 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2-2v2m8 0V6a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2V6"/>
+                </svg>
+              </div>
+              <select 
+                id="employmentStatus" 
+                [(ngModel)]="employmentStatus" 
+                name="employmentStatus"
+                class="select-input"
+                required
+              >
+                <option value="SALARIED">Salaried</option>
+                <option value="SELF_EMPLOYED">Self Employed</option>
+                <option value="BUSINESS">Business Owner</option>
+                <option value="FREELANCER">Freelancer</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="creditScore">Credit Score *</label>
+            <div class="input-wrapper">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4"/>
+                  <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                  <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                </svg>
+              </div>
+              <input 
+                type="number" 
+                id="creditScore" 
+                [(ngModel)]="creditScore" 
+                name="creditScore"
+                placeholder="Your credit score"
+                min="300" 
+                max="850"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="age">Age *</label>
+            <div class="input-wrapper">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <input 
+                type="number" 
+                id="age" 
+                [(ngModel)]="age" 
+                name="age"
+                placeholder="Your age"
+                min="18" 
+                max="65"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="salary">Monthly Salary *</label>
+            <div class="input-wrapper">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <input 
+                type="number" 
+                id="salary" 
+                [(ngModel)]="salary" 
+                name="salary"
+                placeholder="Your monthly salary"
+                required
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" (click)="createRequest()" [disabled]="loading">
+            <span *ngIf="!loading">Create Request</span>
+            <span *ngIf="loading" class="loading-spinner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12a9 9 0 11-6.219-8.56"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- My Requests Section -->
+    <section class="my-requests-section">
+      <div class="section-header">
+        <h2>My Loan Requests</h2>
+        <p>Track your submitted loan requests</p>
+      </div>
+
+      <div class="requests-grid" *ngIf="myRequests.length > 0; else noRequests">
+        <div class="request-card" *ngFor="let request of myRequests">
+          <div class="card-header">
+            <h3>{{ request.loanPurpose }}</h3>
+            <span class="request-id">#{{ request.id }}</span>
+          </div>
+          <div class="card-content">
+            <div class="info-row">
+              <span class="label">Amount:</span>
+              <span class="value">₹{{ request.loanAmount | number }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Credit Score:</span>
+              <span class="value">{{ request.creditScore }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Age:</span>
+              <span class="value">{{ request.age }} years</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Employment:</span>
+              <span class="value">{{ request.employmentStatus }}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-outline" (click)="findLenders(request.id)">
+              Find Lenders
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noRequests>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+          <h3>No requests yet</h3>
+          <p>Create your first loan request to get started</p>
+        </div>
+      </ng-template>
+    </section>
+
+    <!-- Eligible Lenders Section -->
+    <section class="eligible-lenders-section" *ngIf="showLenders">
+      <div class="section-header">
+        <h2>Eligible Lenders</h2>
+        <p>Choose from the lenders that match your criteria</p>
+      </div>
+
+      <div class="lenders-grid" *ngIf="eligibleLenders.length > 0; else noLenders">
+        <div class="lender-card" *ngFor="let lender of eligibleLenders">
+          <div class="lender-header">
+            <h3>{{ lender.name }}</h3>
+            <div class="interest-rate">{{ lender.interestRate }}%</div>
+          </div>
+          <div class="lender-details">
+            <div class="detail-item">
+              <span class="label">Min Amount:</span>
+              <span class="value">₹{{ lender.minimumLoanAmount | number }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Max Amount:</span>
+              <span class="value">₹{{ lender.maximumLoanAmount | number }}</span>
+            </div>
+          </div>
+          <div class="lender-actions">
+            <label class="checkbox-wrapper">
+              <input 
+                type="checkbox" 
+                [checked]="selectedLenders.includes(lender.ruleId)"
+                (change)="toggleLender(lender.ruleId)"
+              >
+              <span class="checkmark"></span>
+              <span class="checkbox-label">Select</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="lenders-actions" *ngIf="eligibleLenders.length > 0">
+        <button class="btn btn-primary" (click)="applyToLenders()" [disabled]="selectedLenders.length === 0">
+          Apply to Selected Lenders ({{ selectedLenders.length }})
+        </button>
+        <button class="btn btn-outline" (click)="showLenders = false">
+          Cancel
+        </button>
+      </div>
+
+      <ng-template #noLenders>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          <h3>No eligible lenders found</h3>
+          <p>Try adjusting your loan criteria or check back later</p>
+        </div>
+      </ng-template>
+    </section>
+
+    <!-- My Applications Section -->
+    <section class="my-applications-section">
+      <div class="section-header">
+        <h2>My Applications</h2>
+        <p>Track the status of your loan applications</p>
+      </div>
+
+      <div class="applications-grid" *ngIf="myApplications.length > 0; else noApplications">
+        <div class="application-card" *ngFor="let application of myApplications">
+          <div class="card-header">
+            <h3>{{ application.loanPurpose }}</h3>
+            <span class="status-badge" [ngClass]="getStatusClass(application.status)">
+              {{ application.status }}
+            </span>
+          </div>
+          <div class="card-content">
+            <div class="info-row">
+              <span class="label">Amount:</span>
+              <span class="value">₹{{ application.loanAmount | number }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Lender:</span>
+              <span class="value">{{ application.lenderCompanyName }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Interest Rate:</span>
+              <span class="value">{{ application.interestRate }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noApplications>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4"/>
+            <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+            <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+          </svg>
+          <h3>No applications yet</h3>
+          <p>Apply to lenders to see your applications here</p>
+        </div>
+      </ng-template>
+    </section>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="error">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      {{ error }}
+    </div>
+  </main>
+</div>

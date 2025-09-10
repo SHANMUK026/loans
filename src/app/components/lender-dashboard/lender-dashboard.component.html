@@ -1,0 +1,313 @@
+<div class="lender-dashboard">
+  <!-- Header Section -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">
+        <i class="fas fa-university"></i>
+        Lender Dashboard
+      </h1>
+      <p class="dashboard-subtitle">Manage your lending rules and review loan applications</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <!-- Create Rule Card -->
+    <div class="card create-rule-card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <i class="fas fa-plus-circle"></i>
+          Create New Lending Rule
+        </h2>
+        <p class="card-subtitle">Set criteria for loan eligibility</p>
+      </div>
+      <div class="card-body">
+        <form class="rule-form" (ngSubmit)="createRule()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="minimumSalary">Minimum Salary</label>
+              <input 
+                type="number" 
+                id="minimumSalary" 
+                [(ngModel)]="newRule.minimumSalary" 
+                name="minimumSalary"
+                class="form-control"
+                placeholder="Enter minimum salary"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="minimumLoanAmount">Minimum Loan Amount</label>
+              <input 
+                type="number" 
+                id="minimumLoanAmount" 
+                [(ngModel)]="newRule.minimumLoanAmount" 
+                name="minimumLoanAmount"
+                class="form-control"
+                placeholder="Enter minimum loan amount"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="maximumLoanAmount">Maximum Loan Amount</label>
+              <input 
+                type="number" 
+                id="maximumLoanAmount" 
+                [(ngModel)]="newRule.maximumLoanAmount" 
+                name="maximumLoanAmount"
+                class="form-control"
+                placeholder="Enter maximum loan amount"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="interestRate">Interest Rate (%)</label>
+              <input 
+                type="number" 
+                id="interestRate" 
+                [(ngModel)]="newRule.interestRate" 
+                name="interestRate"
+                class="form-control"
+                placeholder="Enter interest rate"
+                step="0.01"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="minimumCreditScore">Minimum Credit Score</label>
+              <input 
+                type="number" 
+                id="minimumCreditScore" 
+                [(ngModel)]="newRule.minimumCreditScore" 
+                name="minimumCreditScore"
+                class="form-control"
+                placeholder="Enter minimum credit score"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="minimumAge">Minimum Age</label>
+              <input 
+                type="number" 
+                id="minimumAge" 
+                [(ngModel)]="newRule.minimumAge" 
+                name="minimumAge"
+                class="form-control"
+                placeholder="Enter minimum age"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="maximumAge">Maximum Age</label>
+              <input 
+                type="number" 
+                id="maximumAge" 
+                [(ngModel)]="newRule.maximumAge" 
+                name="maximumAge"
+                class="form-control"
+                placeholder="Enter maximum age"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="employmentTypes">Employment Types</label>
+              <select 
+                id="employmentTypes" 
+                [(ngModel)]="newRule.employmentTypes" 
+                name="employmentTypes"
+                class="form-control"
+                required
+              >
+                <option value="">Select employment type</option>
+                <option value="FULL_TIME">Full Time</option>
+                <option value="PART_TIME">Part Time</option>
+                <option value="SELF_EMPLOYED">Self Employed</option>
+                <option value="CONTRACT">Contract</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ruleStatus">Rule Status</label>
+              <select 
+                id="ruleStatus" 
+                [(ngModel)]="newRule.ruleStatus" 
+                name="ruleStatus"
+                class="form-control"
+                required
+              >
+                <option value="">Select status</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isCreatingRule">
+              <i class="fas fa-save" *ngIf="!isCreatingRule"></i>
+              <i class="fas fa-spinner fa-spin" *ngIf="isCreatingRule"></i>
+              {{ isCreatingRule ? 'Creating...' : 'Create Rule' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="resetRuleForm()">
+              <i class="fas fa-undo"></i>
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- My Rules Card -->
+    <div class="card my-rules-card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <i class="fas fa-list-alt"></i>
+          My Lending Rules
+        </h2>
+        <p class="card-subtitle">Manage your existing lending criteria</p>
+      </div>
+      <div class="card-body">
+        <div class="rules-list" *ngIf="myRules.length > 0; else noRules">
+          <div class="rule-item" *ngFor="let rule of myRules">
+            <div class="rule-header">
+              <h3 class="rule-title">Rule #{{ rule.id }}</h3>
+              <div class="rule-status">
+                <span class="status-badge" [ngClass]="rule.ruleStatus.toLowerCase()">
+                  {{ rule.ruleStatus }}
+                </span>
+              </div>
+            </div>
+            <div class="rule-details">
+              <div class="detail-row">
+                <span class="detail-label">Salary Range:</span>
+                <span class="detail-value">${{ rule.minimumSalary | number }} - ${{ rule.maximumLoanAmount | number }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Loan Range:</span>
+                <span class="detail-value">${{ rule.minimumLoanAmount | number }} - ${{ rule.maximumLoanAmount | number }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Interest Rate:</span>
+                <span class="detail-value">{{ rule.interestRate }}%</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Credit Score:</span>
+                <span class="detail-value">{{ rule.minimumCreditScore }}+</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Age Range:</span>
+                <span class="detail-value">{{ rule.minimumAge }} - {{ rule.maximumAge }} years</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Employment:</span>
+                <span class="detail-value">{{ rule.employmentTypes }}</span>
+              </div>
+            </div>
+            <div class="rule-actions">
+              <button class="btn btn-sm btn-outline" (click)="editRule(rule)">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="deleteRule(rule.id)">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+        <ng-template #noRules>
+          <div class="empty-state">
+            <i class="fas fa-list-alt"></i>
+            <h3>No Rules Created</h3>
+            <p>Create your first lending rule to start receiving loan applications.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Incoming Applications Card -->
+    <div class="card applications-card">
+      <div class="card-header">
+        <h2 class="card-title">
+          <i class="fas fa-inbox"></i>
+          Incoming Applications
+        </h2>
+        <p class="card-subtitle">Review and manage loan applications</p>
+      </div>
+      <div class="card-body">
+        <div class="applications-list" *ngIf="incomingApplications.length > 0; else noApplications">
+          <div class="application-item" *ngFor="let application of incomingApplications">
+            <div class="application-header">
+              <h3 class="application-title">Application #{{ application.loanApplicationId }}</h3>
+              <div class="application-status">
+                <span class="status-badge" [ngClass]="application.status.toLowerCase()">
+                  {{ application.status }}
+                </span>
+              </div>
+            </div>
+            <div class="application-details">
+              <div class="detail-row">
+                <span class="detail-label">Borrower:</span>
+                <span class="detail-value">{{ application.borrowerName }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Loan Amount:</span>
+                <span class="detail-value">${{ application.loanAmount | number }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Purpose:</span>
+                <span class="detail-value">{{ application.loanPurpose }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Credit Score:</span>
+                <span class="detail-value">{{ application.creditScore }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Age:</span>
+                <span class="detail-value">{{ application.age }} years</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Employment:</span>
+                <span class="detail-value">{{ application.employmentStatus }}</span>
+              </div>
+            </div>
+            <div class="application-actions" *ngIf="application.status === 'PENDING'">
+              <button class="btn btn-success" (click)="approveApplication(application.loanApplicationId)">
+                <i class="fas fa-check"></i>
+                Approve
+              </button>
+              <button class="btn btn-danger" (click)="rejectApplication(application.loanApplicationId)">
+                <i class="fas fa-times"></i>
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+        <ng-template #noApplications>
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>No Applications</h3>
+            <p>No loan applications are currently pending your review.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
