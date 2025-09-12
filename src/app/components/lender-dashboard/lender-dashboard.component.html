@@ -2,315 +2,94 @@
   <!-- Header Section -->
   <header class="dashboard-header">
     <div class="header-content">
-      <h1 class="dashboard-title">
-        <i class="fas fa-university"></i>
-        Lender Dashboard
-      </h1>
-      <p class="dashboard-subtitle">Manage your lending rules and review loan applications</p>
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-outline" (click)="logout()">
-        <i class="fas fa-sign-out-alt"></i>
-        Logout
-      </button>
+      <div class="header-left">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <span>LoanEligibility</span>
+        </div>
+        <h1>Lender Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <div class="user-info">
+          <div class="user-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <span>Lender</span>
+        </div>
+        <button class="logout-btn" (click)="logout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16,17 21,12 16,7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Logout
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <div class="dashboard-content">
-    <!-- Create Rule Card -->
-    <div class="card create-rule-card">
-      <div class="card-header">
-        <h2 class="card-title">
-          <i class="fas fa-plus-circle"></i>
-          Create New Lending Rule
-        </h2>
-        <p class="card-subtitle">Set criteria for loan eligibility</p>
-      </div>
-      <div class="card-body">
-        <div class="error-message" *ngIf="error">
-          <i class="fas fa-exclamation-triangle"></i>
-          {{ error }}
-        </div>
-        <form class="rule-form" (ngSubmit)="createRule()">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="minimumSalary">Minimum Salary (₹)</label>
-              <input 
-                type="number" 
-                id="minimumSalary" 
-                [(ngModel)]="newRule.minimumSalary" 
-                name="minimumSalary"
-                class="form-control"
-                placeholder="Enter minimum salary in rupees"
-                required
-              >
-            </div>
-            <div class="form-group">
-              <label for="minimumLoanAmount">Minimum Loan Amount (₹)</label>
-              <input 
-                type="number" 
-                id="minimumLoanAmount" 
-                [(ngModel)]="newRule.minimumLoanAmount" 
-                name="minimumLoanAmount"
-                class="form-control"
-                placeholder="Enter minimum loan amount in rupees"
-                required
-              >
-            </div>
+  <!-- Dashboard View -->
+  <div class="dashboard-view">
+    <div class="dashboard-main">
+      <div class="cards-grid">
+        <!-- Create Lending Rule Card -->
+        <div class="dashboard-card create-card" (click)="navigateToCard('create')">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
           </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="maximumLoanAmount">Maximum Loan Amount (₹)</label>
-              <input 
-                type="number" 
-                id="maximumLoanAmount" 
-                [(ngModel)]="newRule.maximumLoanAmount" 
-                name="maximumLoanAmount"
-                class="form-control"
-                placeholder="Enter maximum loan amount in rupees"
-                required
-              >
-            </div>
-            <div class="form-group">
-              <label for="interestRate">Interest Rate (%)</label>
-              <input 
-                type="number" 
-                id="interestRate" 
-                [(ngModel)]="newRule.interestRate" 
-                name="interestRate"
-                class="form-control"
-                placeholder="Enter interest rate"
-                step="0.01"
-                required
-              >
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="minimumCreditScore">Minimum Credit Score</label>
-              <input 
-                type="number" 
-                id="minimumCreditScore" 
-                [(ngModel)]="newRule.minimumCreditScore" 
-                name="minimumCreditScore"
-                class="form-control"
-                placeholder="Enter minimum credit score"
-                required
-              >
-            </div>
-            <div class="form-group">
-              <label for="minimumAge">Minimum Age</label>
-              <input 
-                type="number" 
-                id="minimumAge" 
-                [(ngModel)]="newRule.minimumAge" 
-                name="minimumAge"
-                class="form-control"
-                placeholder="Enter minimum age"
-                required
-              >
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="maximumAge">Maximum Age</label>
-              <input 
-                type="number" 
-                id="maximumAge" 
-                [(ngModel)]="newRule.maximumAge" 
-                name="maximumAge"
-                class="form-control"
-                placeholder="Enter maximum age"
-                required
-              >
-            </div>
-            <div class="form-group">
-              <label for="employmentTypes">Employment Types</label>
-              <select 
-                id="employmentTypes" 
-                [(ngModel)]="newRule.employmentTypes" 
-                name="employmentTypes"
-                class="form-control"
-                required
-              >
-                <option value="">Select employment type</option>
-                <option value="SALARIED">Salaried</option>
-                <option value="SELF_EMPLOYED">Self Employed</option>
-                <option value="NOT_EMPLOYED">Not Employed</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="ruleStatus">Rule Status</label>
-              <select 
-                id="ruleStatus" 
-                [(ngModel)]="newRule.ruleStatus" 
-                name="ruleStatus"
-                class="form-control"
-                required
-              >
-                <option value="">Select status</option>
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary" [disabled]="isCreatingRule">
-              <i class="fas fa-save" *ngIf="!isCreatingRule"></i>
-              <i class="fas fa-spinner fa-spin" *ngIf="isCreatingRule"></i>
-              {{ isCreatingRule ? 'Saving...' : (editingRuleId ? 'Update Rule' : 'Create Rule') }}
-            </button>
-            <button type="button" class="btn btn-secondary" (click)="clearForm()">
-              <i class="fas fa-undo"></i>
-              {{ editingRuleId ? 'Cancel Edit' : 'Reset' }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- My Rules Card -->
-    <div class="card my-rules-card">
-      <div class="card-header">
-        <h2 class="card-title">
-          <i class="fas fa-list-alt"></i>
-          My Lending Rules
-        </h2>
-        <p class="card-subtitle">Manage your existing lending criteria</p>
-      </div>
-      <div class="card-body">
-        <div class="rules-list" *ngIf="myRules.length > 0; else noRules">
-          <div class="rule-item" *ngFor="let rule of myRules">
-            <div class="rule-header">
-              <h3 class="rule-title">Rule #{{ rule.id }}</h3>
-              <div class="rule-status">
-                <span class="status-badge" [ngClass]="rule.ruleStatus.toLowerCase()">
-                  {{ rule.ruleStatus }}
-                </span>
-              </div>
-            </div>
-            <div class="rule-details">
-              <div class="detail-row">
-                <span class="detail-label">Salary Range:</span>
-                <span class="detail-value">₹{{ rule.minimumSalary | number }} - ₹{{ rule.maximumLoanAmount | number }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Loan Range:</span>
-                <span class="detail-value">₹{{ rule.minimumLoanAmount | number }} - ₹{{ rule.maximumLoanAmount | number }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Interest Rate:</span>
-                <span class="detail-value">{{ rule.interestRate }}%</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Credit Score:</span>
-                <span class="detail-value">{{ rule.minimumCreditScore }}+</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Age Range:</span>
-                <span class="detail-value">{{ rule.minimumAge }} - {{ rule.maximumAge }} years</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Employment:</span>
-                <span class="detail-value">{{ rule.employmentTypes }}</span>
-              </div>
-            </div>
-            <div class="rule-actions">
-              <button class="btn btn-sm btn-outline" (click)="editRule(rule)">
-                <i class="fas fa-edit"></i>
-                Edit
-              </button>
-              <button class="btn btn-sm btn-danger" (click)="deleteRule(rule.id)">
-                <i class="fas fa-trash"></i>
-                Delete
-              </button>
-            </div>
+          <h3>Create Lending Rule</h3>
+          <p>Set criteria for loan eligibility and create new rules</p>
+          <div class="card-stats">
+            <span class="stat-number">+</span>
+            <span class="stat-label">New Rule</span>
           </div>
         </div>
-        <ng-template #noRules>
-          <div class="empty-state">
-            <i class="fas fa-list-alt"></i>
-            <h3>No Rules Created</h3>
-            <p>Create your first lending rule to start receiving loan applications.</p>
-          </div>
-        </ng-template>
-      </div>
-    </div>
 
-    <!-- Incoming Applications Card -->
-    <div class="card applications-card">
-      <div class="card-header">
-        <h2 class="card-title">
-          <i class="fas fa-inbox"></i>
-          Incoming Applications
-        </h2>
-        <p class="card-subtitle">Review and manage loan applications</p>
-      </div>
-      <div class="card-body">
-        <div class="applications-list" *ngIf="incomingApplications.length > 0; else noApplications">
-          <div class="application-item" *ngFor="let application of incomingApplications">
-            <div class="application-header">
-              <h3 class="application-title">Application #{{ application.loanApplicationId }}</h3>
-              <div class="application-status">
-                <span class="status-badge" [ngClass]="application.status.toLowerCase()">
-                  {{ application.status }}
-                </span>
-              </div>
-            </div>
-            <div class="application-details">
-              <div class="detail-row">
-                <span class="detail-label">Borrower:</span>
-                <span class="detail-value">{{ application.borrowerName }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Loan Amount:</span>
-                <span class="detail-value">₹{{ application.loanAmount | number }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Purpose:</span>
-                <span class="detail-value">{{ application.loanPurpose }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Credit Score:</span>
-                <span class="detail-value">{{ application.creditScore }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Age:</span>
-                <span class="detail-value">{{ application.age }} years</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Employment:</span>
-                <span class="detail-value">{{ application.employmentStatus }}</span>
-              </div>
-            </div>
-            <div class="application-actions" *ngIf="application.status === 'PENDING'">
-              <button class="btn btn-success" (click)="approveApplication(application.loanApplicationId)">
-                <i class="fas fa-check"></i>
-                Approve
-              </button>
-              <button class="btn btn-danger" (click)="rejectApplication(application.loanApplicationId)">
-                <i class="fas fa-times"></i>
-                Reject
-              </button>
-            </div>
+        <!-- My Lending Rules Card -->
+        <div class="dashboard-card rules-card" (click)="navigateToCard('rules')">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10,9 9,9 8,9"/>
+            </svg>
+          </div>
+          <h3>My Lending Rules</h3>
+          <p>Manage all your lending criteria and rules</p>
+          <div class="card-stats">
+            <span class="stat-number">{{ myRules.length }}</span>
+            <span class="stat-label">Rules</span>
           </div>
         </div>
-        <ng-template #noApplications>
-          <div class="empty-state">
-            <i class="fas fa-inbox"></i>
-            <h3>No Applications</h3>
-            <p>No loan applications are currently pending your review.</p>
+
+        <!-- Incoming Applications Card -->
+        <div class="dashboard-card applications-card" (click)="navigateToCard('applications')">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
           </div>
-        </ng-template>
+          <h3>Incoming Applications</h3>
+          <p>Review and manage loan applications from borrowers</p>
+          <div class="card-stats">
+            <span class="stat-number">{{ incomingApplications.length }}</span>
+            <span class="stat-label">Applications</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
 </div>

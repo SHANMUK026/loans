@@ -1,0 +1,218 @@
+<div class="create-rule-container">
+  <header class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5"/>
+          <polyline points="12,19 5,12 12,5"/>
+        </svg>
+        Back to Dashboard
+      </button>
+      <div class="header-info">
+        <h1>Create Lending Rule</h1>
+        <p>Set up your lending criteria and terms</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="rule-form">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="minimumLoanAmount">Minimum Loan Amount (₹) *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <input 
+              type="number" 
+              id="minimumLoanAmount" 
+              [(ngModel)]="ruleData.minimumLoanAmount" 
+              name="minimumLoanAmount"
+              placeholder="Minimum amount"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="maximumLoanAmount">Maximum Loan Amount (₹) *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <input 
+              type="number" 
+              id="maximumLoanAmount" 
+              [(ngModel)]="ruleData.maximumLoanAmount" 
+              name="maximumLoanAmount"
+              placeholder="Maximum amount"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="interestRate">Interest Rate (%) *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4"/>
+                <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+              </svg>
+            </div>
+            <input 
+              type="number" 
+              id="interestRate" 
+              [(ngModel)]="ruleData.interestRate" 
+              name="interestRate"
+              placeholder="Interest rate percentage"
+              min="0" 
+              max="50"
+              step="0.1"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="minimumCreditScore">Minimum Credit Score *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4"/>
+                <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+              </svg>
+            </div>
+            <input 
+              type="number" 
+              id="minimumCreditScore" 
+              [(ngModel)]="ruleData.minimumCreditScore" 
+              name="minimumCreditScore"
+              placeholder="Minimum credit score"
+              min="300" 
+              max="850"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="minimumAge">Minimum Age *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <input 
+              type="number" 
+              id="minimumAge" 
+              [(ngModel)]="ruleData.minimumAge" 
+              name="minimumAge"
+              placeholder="Minimum age"
+              min="18" 
+              max="65"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="maximumAge">Maximum Age *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <input 
+              type="number" 
+              id="maximumAge" 
+              [(ngModel)]="ruleData.maximumAge" 
+              name="maximumAge"
+              placeholder="Maximum age"
+              min="18" 
+              max="65"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="minimumSalary">Minimum Monthly Salary (₹) *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <input 
+              type="number" 
+              id="minimumSalary" 
+              [(ngModel)]="ruleData.minimumSalary" 
+              name="minimumSalary"
+              placeholder="Minimum monthly salary"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="employmentTypes">Employment Types *</label>
+          <div class="input-wrapper">
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 13.255A23.931 23.931 0 0 1 12 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2-2v2m8 0V6a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2V6"/>
+              </svg>
+            </div>
+            <select 
+              id="employmentTypes" 
+              [(ngModel)]="ruleData.employmentTypes" 
+              name="employmentTypes"
+              class="select-input"
+              required
+            >
+              <option value="SALARIED">Salaried</option>
+              <option value="SELF_EMPLOYED">Self Employed</option>
+              <option value="NOT_EMPLOYED">Not Employed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-primary" (click)="createRule()" [disabled]="loading">
+          <span *ngIf="!loading">Create Rule</span>
+          <span *ngIf="loading" class="loading-spinner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12a9 9 0 11-6.219-8.56"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="error">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      <span>{{ error }}</span>
+    </div>
+  </div>
+</div>

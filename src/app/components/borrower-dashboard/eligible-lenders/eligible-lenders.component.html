@@ -1,0 +1,143 @@
+<div class="eligible-lenders-container">
+  <header class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5"/>
+          <polyline points="12,19 5,12 12,5"/>
+        </svg>
+        Back to Dashboard
+      </button>
+      <div class="header-info">
+        <h1>Eligible Lenders</h1>
+        <p>Choose from the lenders that match your criteria</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="my-requests-section">
+      <h2>My Loan Requests</h2>
+      <div class="requests-grid" *ngIf="myRequests.length > 0; else noRequests">
+        <div class="request-card" *ngFor="let request of myRequests">
+          <div class="card-header">
+            <h3>{{ request.loanPurpose }}</h3>
+            <span class="request-id">#{{ request.id }}</span>
+          </div>
+          <div class="card-content">
+            <div class="info-row">
+              <span class="label">Amount:</span>
+              <span class="value">₹{{ request.loanAmount | number }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Salary:</span>
+              <span class="value">₹{{ request.salary | number }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Credit Score:</span>
+              <span class="value">{{ request.creditScore }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Age:</span>
+              <span class="value">{{ request.age }} years</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Employment:</span>
+              <span class="value">{{ request.employmentStatus }}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-primary" (click)="findLenders(request.id)" [disabled]="loading">
+              <span *ngIf="!loading">Find Lenders</span>
+              <span *ngIf="loading" class="loading-spinner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noRequests>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+          <h3>No requests yet</h3>
+          <p>Create your first loan request to get started</p>
+          <button class="btn btn-primary" (click)="goBack()">Go to Apply for Loan</button>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="eligible-lenders-section" *ngIf="showLenders">
+      <h2>Available Lenders</h2>
+      <div class="lenders-grid" *ngIf="eligibleLenders.length > 0; else noLenders">
+        <div class="lender-card" *ngFor="let lender of eligibleLenders">
+          <div class="lender-header">
+            <h3>{{ lender.name }}</h3>
+            <div class="interest-rate">{{ lender.interestRate }}%</div>
+          </div>
+          <div class="lender-details">
+            <div class="detail-item">
+              <span class="label">Min Amount:</span>
+              <span class="value">₹{{ lender.minimumLoanAmount | number }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Max Amount:</span>
+              <span class="value">₹{{ lender.maximumLoanAmount | number }}</span>
+            </div>
+          </div>
+          <div class="lender-actions">
+            <label class="checkbox-wrapper">
+              <input 
+                type="checkbox" 
+                [checked]="selectedLenders.includes(lender.ruleId)"
+                (change)="toggleLender(lender.ruleId)"
+              >
+              <span class="checkmark"></span>
+              <span class="checkbox-label">Select</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="lenders-actions" *ngIf="eligibleLenders.length > 0">
+        <button class="btn btn-primary" (click)="applyToLenders()" [disabled]="selectedLenders.length === 0 || loading">
+          <span *ngIf="!loading">Apply to Selected Lenders ({{ selectedLenders.length }})</span>
+          <span *ngIf="loading" class="loading-spinner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12a9 9 0 11-6.219-8.56"/>
+            </svg>
+          </span>
+        </button>
+        <button class="btn btn-outline" (click)="showLenders = false">
+          Cancel
+        </button>
+      </div>
+
+      <ng-template #noLenders>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          <h3>No eligible lenders found</h3>
+          <p>Try adjusting your loan criteria or check back later</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="error">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      <span>{{ error }}</span>
+    </div>
+  </div>
+</div>

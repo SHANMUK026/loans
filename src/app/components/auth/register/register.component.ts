@@ -80,13 +80,65 @@ export class RegisterComponent {
     this.authService.register(registerData).subscribe({
       next: (response) => {
         this.loading = false;
-        this.router.navigate(['/login']);
+        this.error = 'Registration successful! Please log in with your credentials.';
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000); // Navigate after showing success message
       },
       error: (error) => {
-        this.error = 'Registration failed. Please try again.';
         this.loading = false;
+        this.error = this.getRegistrationErrorMessage(error);
       }
     });
+  }
+
+  private getRegistrationErrorMessage(error: any): string {
+    const status = error.status;
+    const errorMessage = error.error?.message || error.message || '';
+
+    switch (status) {
+      case 400:
+        if (errorMessage.toLowerCase().includes('username') && errorMessage.toLowerCase().includes('taken')) {
+          return 'Username is already taken. Please choose a different username.';
+        }
+        if (errorMessage.toLowerCase().includes('email') && errorMessage.toLowerCase().includes('taken')) {
+          return 'Email is already registered. Please use a different email or try logging in.';
+        }
+        if (errorMessage.toLowerCase().includes('validation')) {
+          return 'Please check all fields and ensure they are valid.';
+        }
+        if (errorMessage.toLowerCase().includes('password')) {
+          return 'Password does not meet requirements. Please use a stronger password.';
+        }
+        return 'Invalid registration data. Please check your information.';
+      
+      case 409:
+        if (errorMessage.toLowerCase().includes('username')) {
+          return 'Username already exists. Please choose a different username.';
+        }
+        if (errorMessage.toLowerCase().includes('email')) {
+          return 'Email already registered. Please use a different email.';
+        }
+        return 'Account already exists. Please try logging in instead.';
+      
+      case 422:
+        return 'Invalid data provided. Please check all fields and try again.';
+      
+      case 500:
+        return 'Server error during registration. Please try again later.';
+      
+      default:
+        if (errorMessage.toLowerCase().includes('username taken')) {
+          return 'Username is already taken. Please choose another.';
+        }
+        if (errorMessage.toLowerCase().includes('email exists')) {
+          return 'Email is already registered. Please use a different email.';
+        }
+        if (errorMessage.toLowerCase().includes('duplicate')) {
+          return 'Account with this information already exists.';
+        }
+        return errorMessage || 'Registration failed. Please try again.';
+    }
   }
 
   // Simple navigation methods

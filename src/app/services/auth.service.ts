@@ -22,37 +22,25 @@ export class AuthService {
 
   getToken(): string | null {
     if (typeof window !== 'undefined' && window.localStorage) {
-      const token = localStorage.getItem('token');
-      console.log('🔍 AuthService - getToken called, returning:', token);
-      return token;
+      return localStorage.getItem('token');
     }
-    console.log('🔍 AuthService - getToken called, window or localStorage undefined');
     return null;
   }
 
   setToken(token: string): void {
     if (typeof window !== 'undefined' && window.localStorage) {
-      console.log('🔍 AuthService - setToken called with:', token);
       localStorage.setItem('token', token);
-      console.log('🔍 AuthService - Token stored, verifying:', localStorage.getItem('token'));
-    } else {
-      console.log('🔍 AuthService - setToken called, window or localStorage undefined');
     }
   }
 
   removeToken(): void {
     if (typeof window !== 'undefined' && window.localStorage) {
-      console.log('🔍 AuthService - removeToken called');
       localStorage.removeItem('token');
-    } else {
-      console.log('🔍 AuthService - removeToken called, window or localStorage undefined');
     }
   }
 
   isLoggedIn(): boolean {
-    const loggedIn = !!this.getToken();
-    console.log('🔍 AuthService - isLoggedIn called, returning:', loggedIn);
-    return loggedIn;
+    return !!this.getToken();
   }
 
   logout(): void {

@@ -41,10 +41,7 @@ export class LoginComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        console.log('🔍 Login - Response received:', response);
-        console.log('🔍 Login - Token received:', response.token);
         this.authService.setToken(response.token);
-        console.log('🔍 Login - Token stored in localStorage:', localStorage.getItem('token'));
         this.loading = false;
         
         if (response.role === 'BORROWER') {
@@ -54,10 +51,51 @@ export class LoginComponent {
         }
       },
       error: (error) => {
-        this.error = 'Login failed. Please try again.';
         this.loading = false;
+        this.error = this.getLoginErrorMessage(error);
       }
     });
+  }
+
+  private getLoginErrorMessage(error: any): string {
+    const status = error.status;
+    const errorMessage = error.error?.message || error.message || '';
+
+    switch (status) {
+      case 400:
+        if (errorMessage.toLowerCase().includes('invalid credentials') || 
+            errorMessage.toLowerCase().includes('wrong password')) {
+          return 'Incorrect username or password. Please try again.';
+        }
+        if (errorMessage.toLowerCase().includes('validation')) {
+          return 'Please enter valid username and password.';
+        }
+        return 'Invalid login data. Please check your credentials.';
+      
+      case 401:
+        return 'Incorrect username or password. Please try again.';
+      
+      case 404:
+        return 'User not found. Please check your username or register for a new account.';
+      
+      case 403:
+        return 'Account is disabled. Please contact support.';
+      
+      case 500:
+        return 'Server error. Please try again later.';
+      
+      default:
+        if (errorMessage.toLowerCase().includes('invalid credentials')) {
+          return 'Incorrect username or password.';
+        }
+        if (errorMessage.toLowerCase().includes('user not found')) {
+          return 'User not found. Please check your username.';
+        }
+        if (errorMessage.toLowerCase().includes('wrong password')) {
+          return 'Incorrect password. Please try again.';
+        }
+        return errorMessage || 'Login failed. Please try again.';
+    }
   }
 
   // Simple navigation methods

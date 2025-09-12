@@ -13,7 +13,6 @@ export class BorrowerRequestService {
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    console.log('🔍 BorrowerRequestService - Getting token:', token);
     
     if (token) {
       return new HttpHeaders({
@@ -29,12 +28,10 @@ export class BorrowerRequestService {
 
 
   createRequest(requestData: CreateRequest): Observable<any> {
-    console.log('🔍 BorrowerRequestService - Creating request with headers:', this.getAuthHeaders());
     return this.http.post(this.baseUrl, requestData, { headers: this.getAuthHeaders() });
   }
 
   getMyRequests(): Observable<RequestResponse[]> {
-    console.log('🔍 BorrowerRequestService - Getting requests with headers:', this.getAuthHeaders());
     return this.http.get<RequestResponse[]>(this.baseUrl, { headers: this.getAuthHeaders() });
   }
 }

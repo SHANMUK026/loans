@@ -1,0 +1,208 @@
+<div class="incoming-applications-container">
+  <header class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5"/>
+          <polyline points="12,19 5,12 12,5"/>
+        </svg>
+        Back to Dashboard
+      </button>
+      <div class="header-info">
+        <h1>Incoming Applications</h1>
+        <p>Review and manage loan applications from borrowers</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="applications-section">
+      <div class="section-header">
+        <h2>Loan Applications</h2>
+        <div class="export-actions" *ngIf="applications.length > 0">
+          <button class="btn btn-outline btn-sm" (click)="exportToCSV()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            Export CSV
+          </button>
+          <button class="btn btn-outline btn-sm" (click)="exportToPDF()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            Export PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="applications-table" *ngIf="applications.length > 0; else noApplications">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th (click)="sortApplications('loanApplicationId')" class="sortable">
+                Application ID
+                <span class="sort-icon" *ngIf="sortField === 'loanApplicationId'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+              </th>
+              <th (click)="sortApplications('borrowerName')" class="sortable">
+                Borrower Name
+                <span class="sort-icon" *ngIf="sortField === 'borrowerName'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+              </th>
+              <th (click)="sortApplications('loanAmount')" class="sortable">
+                Amount
+                <span class="sort-icon" *ngIf="sortField === 'loanAmount'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+              </th>
+              <th (click)="sortApplications('loanPurpose')" class="sortable">
+                Purpose
+                <span class="sort-icon" *ngIf="sortField === 'loanPurpose'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+              </th>
+              <th (click)="sortApplications('status')" class="sortable">
+                Status
+                <span class="sort-icon" *ngIf="sortField === 'status'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+              </th>
+              <th (click)="sortApplications('creditScore')" class="sortable">
+                Credit Score
+                <span class="sort-icon" *ngIf="sortField === 'creditScore'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+              </th>
+              <th (click)="sortApplications('applicationDate')" class="sortable">
+                Date
+                <span class="sort-icon" *ngIf="sortField === 'applicationDate'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let application of applications">
+              <td>{{ application.loanApplicationId || 'N/A' }}</td>
+              <td>{{ application.borrowerName || 'N/A' }}</td>
+              <td>₹{{ application.loanAmount | number }}</td>
+              <td>{{ application.loanPurpose || 'N/A' }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusClass(application.status)">
+                  {{ application.status || 'N/A' }}
+                </span>
+              </td>
+              <td>{{ application.creditScore || 'N/A' }}</td>
+              <td>{{ application.applicationDate | date:'short' }}</td>
+              <td>
+                <div class="action-buttons" *ngIf="application.status === 'PENDING'">
+                  <button class="btn btn-success btn-sm" (click)="updateApplicationStatus(application.id, 'APPROVED')" [disabled]="loading">
+                    Approve
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="updateApplicationStatus(application.id, 'REJECTED')" [disabled]="loading">
+                    Reject
+                  </button>
+                </div>
+                <span *ngIf="application.status !== 'PENDING'" class="no-actions">No actions</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="applications-grid" *ngIf="false">
+        <div class="application-card" *ngFor="let application of applications">
+          <div class="card-header">
+            <h3>{{ application.loanPurpose }}</h3>
+            <span class="status-badge" [ngClass]="getStatusClass(application.status)">
+              {{ application.status }}
+            </span>
+          </div>
+          <div class="card-content">
+            <div class="info-row">
+              <span class="label">Borrower:</span>
+              <span class="value">{{ application.borrowerName }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Amount:</span>
+              <span class="value">₹{{ application.loanAmount | number }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Interest Rate:</span>
+              <span class="value">{{ application.interestRate }}%</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Credit Score:</span>
+              <span class="value">{{ application.creditScore }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Age:</span>
+              <span class="value">{{ application.age }} years</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Salary:</span>
+              <span class="value">₹{{ application.salary | number }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Employment:</span>
+              <span class="value">{{ application.employmentStatus }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Applied Date:</span>
+              <span class="value">{{ application.applicationDate | date:'medium' }}</span>
+            </div>
+          </div>
+          <div class="card-actions" *ngIf="application.status === 'PENDING'">
+            <button class="btn btn-success" (click)="updateApplicationStatus(application.id, 'APPROVED')" [disabled]="loading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4"/>
+                <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+              </svg>
+              Approve
+            </button>
+            <button class="btn btn-danger" (click)="updateApplicationStatus(application.id, 'REJECTED')" [disabled]="loading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+              </svg>
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noApplications>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4"/>
+            <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+            <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+          </svg>
+          <h3>No applications yet</h3>
+          <p>Applications from borrowers will appear here</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="error">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      <span>{{ error }}</span>
+    </div>
+  </div>
+</div>

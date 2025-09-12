@@ -1,0 +1,222 @@
+<div class="calculator-container">
+  <!-- Navigation Header -->
+  <header class="calculator-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5"/>
+          <polyline points="12,19 5,12 12,5"/>
+        </svg>
+        Back to Dashboard
+      </button>
+      <div class="header-info">
+        <h1>Loan Calculator</h1>
+        <p>Calculate your monthly payments and interest</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="calculator-content">
+    <!-- Input Section -->
+    <div class="input-section">
+      <div class="input-card">
+        <h2>Enter Loan Details</h2>
+        <div class="loan-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="loanAmount">Loan Amount</label>
+              <div class="input-wrapper">
+                <span class="currency-symbol">₹</span>
+                <input 
+                  type="number" 
+                  id="loanAmount"
+                  [(ngModel)]="loanAmount" 
+                  placeholder="Enter amount"
+                  min="0"
+                  step="1000"
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="interestRate">Interest Rate (% per year)</label>
+              <div class="input-wrapper">
+                <input 
+                  type="number" 
+                  id="interestRate"
+                  [(ngModel)]="interestRate" 
+                  placeholder="Enter rate"
+                  min="0"
+                  max="50"
+                  step="0.1"
+                >
+                <span class="input-suffix">%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="loanYears">Loan Term (Years)</label>
+              <div class="input-wrapper">
+                <input 
+                  type="number" 
+                  id="loanYears"
+                  [(ngModel)]="loanYears" 
+                  placeholder="0"
+                  min="0"
+                  max="30"
+                  step="1"
+                >
+                <span class="input-suffix">years</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="loanMonths">Additional Months</label>
+              <div class="input-wrapper">
+                <input 
+                  type="number" 
+                  id="loanMonths"
+                  [(ngModel)]="loanMonths" 
+                  placeholder="0"
+                  min="0"
+                  max="11"
+                  step="1"
+                >
+                <span class="input-suffix">months</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="term-display" *ngIf="getTotalMonths() > 0">
+                <span class="term-label">Total Term:</span>
+                <span class="term-value">{{getTermDisplay()}} ({{getTotalMonths()}} months)</span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-calculate" (click)="calculateLoan()" [disabled]="!loanAmount || !interestRate || getTotalMonths() === 0">
+                Calculate
+              </button>
+              <button type="button" class="btn btn-reset" (click)="resetCalculator()">
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" *ngIf="showResults">
+      <div class="results-card">
+        <div class="results-header">
+          <h3>Your Loan Calculation</h3>
+          <button class="btn btn-download" (click)="downloadCalculation()" *ngIf="selectedCalculation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7,10 12,15 17,10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download
+          </button>
+        </div>
+        
+        <div class="main-result">
+          <div class="result-label">Monthly Payment</div>
+          <div class="result-amount">{{formatCurrency(monthlyPayment)}}</div>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <div class="result-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+            <div class="result-content">
+              <div class="result-title">Total Interest</div>
+              <div class="result-value">{{formatCurrency(totalInterest)}}</div>
+            </div>
+          </div>
+          
+          <div class="result-item">
+            <div class="result-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <div class="result-content">
+              <div class="result-title">Total Amount</div>
+              <div class="result-value">{{formatCurrency(totalAmount)}}</div>
+            </div>
+          </div>
+          
+          <div class="result-item">
+            <div class="result-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+            </div>
+            <div class="result-content">
+              <div class="result-title">Loan Term</div>
+              <div class="result-value">{{getTermDisplay()}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="breakdown-section">
+          <h4>Payment Breakdown</h4>
+          <div class="breakdown-items">
+            <div class="breakdown-item">
+              <span class="breakdown-label">Principal Amount</span>
+              <span class="breakdown-value">{{formatCurrency(loanAmount)}}</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Interest Amount</span>
+              <span class="breakdown-value">{{formatCurrency(totalInterest)}}</span>
+            </div>
+            <div class="breakdown-item total">
+              <span class="breakdown-label">Total to Pay</span>
+              <span class="breakdown-value">{{formatCurrency(totalAmount)}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Section -->
+    <div class="history-section" *ngIf="calculationHistory.length > 0">
+      <div class="history-card">
+        <h3>Recent Calculations</h3>
+        <div class="history-list">
+          <div class="history-item" *ngFor="let calc of calculationHistory" 
+               [class.selected]="selectedCalculation?.id === calc.id"
+               (click)="loadCalculation(calc)">
+            <div class="history-main">
+              <div class="history-amount">{{formatCurrency(calc.loanAmount)}}</div>
+              <div class="history-payment">{{formatCurrency(calc.monthlyPayment)}}/month</div>
+            </div>
+            <div class="history-details">
+              <div class="history-term">{{calc.interestRate}}% for {{calc.loanYears}}y {{calc.loanMonths}}m</div>
+              <div class="history-date">{{calc.calculatedAt | date:'short'}}</div>
+            </div>
+            <button class="delete-btn" (click)="deleteCalculation(calc.id); $event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3,6 5,6 21,6"/>
+                <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

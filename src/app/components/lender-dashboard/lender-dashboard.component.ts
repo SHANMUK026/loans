@@ -3,191 +3,48 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { LenderRulesService } from '../../services/lender-rules.service';
 import { LoanApplicationService } from '../../services/loan-application.service';
-import { CreateRule, RuleResponse } from '../../models/lender-rule.dto';
+import { RuleResponse } from '../../models/lender-rule.dto';
 import { LoanApplication } from '../../models/loan-application.dto';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-lender-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './lender-dashboard.component.html',
   styleUrls: ['./lender-dashboard.component.css']
 })
 export class LenderDashboardComponent implements OnInit {
-  // Form data for creating rule
-  newRule: CreateRule = {
-    minimumSalary: 0,
-    minimumLoanAmount: 0,
-    maximumLoanAmount: 0,
-    interestRate: 0,
-    minimumCreditScore: 0,
-    minimumAge: 0,
-    maximumAge: 0,
-    employmentTypes: 'SALARIED',
-    ruleStatus: 'ACTIVE'
-  };
-
- 
   myRules: RuleResponse[] = [];
   incomingApplications: LoanApplication[] = [];
-
-
   error: string = '';
-  loading: boolean = false;
-  isCreatingRule: boolean = false;
-  editingRuleId: number = 0;
 
   constructor(
     private authService: AuthService,
-    private rulesService: LenderRulesService,
+    private lenderRulesService: LenderRulesService,
     private loanService: LoanApplicationService,
     private router: Router
   ) {}
 
   ngOnInit() {
-    // Check if user is authenticated
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/login']);
       return;
     }
-    
     this.loadMyRules();
     this.loadIncomingApplications();
   }
 
-  
-  createRule() {
-    if (!this.newRule.minimumSalary || !this.newRule.minimumLoanAmount || !this.newRule.maximumLoanAmount || !this.newRule.interestRate) {
-      this.error = 'Please fill in all required fields';
-      return;
-    }
-
-    this.isCreatingRule = true;
-    this.error = '';
-
-    if (this.editingRuleId) {
-      // Update existing rule
-      this.rulesService.updateRule(this.editingRuleId, this.newRule).subscribe({
-        next: (response) => {
-          this.isCreatingRule = false;
-          this.loadMyRules();
-          this.clearForm();
-          this.error = '';
-        },
-        error: (error) => {
-          this.error = 'Failed to update rule';
-          this.isCreatingRule = false;
-        }
-      });
-    } else {
-      // Create new rule
-      this.rulesService.createRule(this.newRule).subscribe({
-        next: (response) => {
-          this.isCreatingRule = false;
-          this.loadMyRules();
-          this.clearForm();
-          this.error = '';
-        },
-        error: (error) => {
-          this.error = 'Failed to create rule';
-          this.isCreatingRule = false;
-        }
-      });
-    }
-  }
-
-  
-  resetRuleForm() {
-    this.newRule = {
-      minimumSalary: 0,
-      minimumLoanAmount: 0,
-      maximumLoanAmount: 0,
-      interestRate: 0,
-      minimumCreditScore: 0,
-      minimumAge: 0,
-      maximumAge: 0,
-      employmentTypes: 'SALARIED',
-      ruleStatus: 'ACTIVE'
-    };
-  }
-
-  editRule(rule: RuleResponse) {
-    this.editingRuleId = rule.id;
-    this.newRule = {
-      minimumSalary: rule.minimumSalary,
-      minimumLoanAmount: rule.minimumLoanAmount,
-      maximumLoanAmount: rule.maximumLoanAmount,
-      interestRate: rule.interestRate,
-      minimumCreditScore: rule.minimumCreditScore,
-      minimumAge: rule.minimumAge,
-      maximumAge: rule.maximumAge,
-      employmentTypes: rule.employmentTypes,
-      ruleStatus: rule.ruleStatus
-    };
-  }
-
-
-  deleteRule(ruleId: number) {
-    if (confirm('Are you sure you want to delete this rule?')) {
-      this.rulesService.deleteRule(ruleId).subscribe({
-        next: (response) => {
-          this.loadMyRules();
-        },
-        error: (error) => {
-          this.error = 'Failed to delete rule';
-        }
-      });
-    }
-  }
-
-
-  approveApplication(applicationId: number) {
-    this.loading = true;
-    this.error = '';
-
-    this.loanService.updateLoanStatus(applicationId, 'APPROVED').subscribe({
-      next: (response) => {
-        this.loading = false;
-        this.loadIncomingApplications();
-      },
-      error: (error) => {
-        this.error = 'Failed to approve application';
-        this.loading = false;
-      }
-    });
-  }
-
- 
-  rejectApplication(applicationId: number) {
-    this.loading = true;
-    this.error = '';
-
-    this.loanService.updateLoanStatus(applicationId, 'REJECTED').subscribe({
-      next: (response) => {
-        this.loading = false;
-        this.loadIncomingApplications();
-      },
-      error: (error) => {
-        this.error = 'Failed to reject application';
-        this.loading = false;
-      }
-    });
-  }
-
-
   loadMyRules() {
-    this.rulesService.getMyRules().subscribe({
+    this.lenderRulesService.getMyRules().subscribe({
       next: (rules) => {
         this.myRules = rules;
       },
       error: (error) => {
-        console.error('Error loading rules:', error);
+        this.error = 'Failed to load rules. Please try again.';
       }
     });
   }
-
 
   loadIncomingApplications() {
     this.loanService.getLenderApplications().subscribe({
@@ -195,20 +52,27 @@ export class LenderDashboardComponent implements OnInit {
         this.incomingApplications = applications;
       },
       error: (error) => {
-        console.error('Error loading applications:', error);
+        this.error = 'Failed to load applications. Please try again.';
       }
     });
   }
 
- 
-  clearForm() {
-    this.resetRuleForm();
-    this.editingRuleId = 0;
+  navigateToCard(cardType: string) {
+    switch(cardType) {
+      case 'create':
+        this.router.navigate(['/lender/create-rule']);
+        break;
+      case 'rules':
+        this.router.navigate(['/lender/my-rules']);
+        break;
+      case 'applications':
+        this.router.navigate(['/lender/incoming-applications']);
+        break;
+    }
   }
 
-
   logout() {
-    this.authService.removeToken();
-    this.router.navigate(['/']);
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
