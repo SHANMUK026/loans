@@ -316,6 +316,25 @@
   font-size: 1rem;
 }
 
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #c6f6d5;
+  color: #22543d;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  border: 1px solid #9ae6b4;
+  font-weight: 500;
+}
+
+.success-message svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 .error-message {
   display: flex;
   align-items: center;

@@ -21,6 +21,7 @@ export class EligibleLendersComponent implements OnInit {
   showLenders: boolean = false;
   loading: boolean = false;
   error: string = '';
+  success: string = '';
   currentRequestId: number | null = null;
 
   constructor(
@@ -51,6 +52,7 @@ export class EligibleLendersComponent implements OnInit {
   findLenders(requestId: number) {
     this.loading = true;
     this.error = '';
+    this.success = '';
     this.currentRequestId = requestId;
     
     this.loanApplicationService.getEligibleLenders(requestId, 0).subscribe({
@@ -89,6 +91,7 @@ export class EligibleLendersComponent implements OnInit {
 
     this.loading = true;
     this.error = '';
+    this.success = '';
 
     
     const applications = this.selectedLenders.map(ruleId => 
@@ -103,8 +106,8 @@ export class EligibleLendersComponent implements OnInit {
         this.selectedLenders = [];
         this.currentRequestId = null;
         this.loadMyRequests(); 
-        this.error = 'Successfully applied to selected lenders!';
-        setTimeout(() => this.error = '', 3000); 
+        this.success = 'Successfully applied to selected lenders!';
+        setTimeout(() => this.success = '', 3000); 
       },
       error: (error: any) => {
         this.loading = false;
