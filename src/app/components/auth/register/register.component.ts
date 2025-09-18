@@ -13,19 +13,19 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  // Basic user info
+  
   userName: string = '';
   email: string = '';
   password: string = '';
   role: string = 'BORROWER';
 
-  // Borrower specific fields
+  
   borrowerFirstName: string = '';
   borrowerLastName: string = '';
   borrowerPhoneNumber: string = '';
   borrowerAddress: string = '';
 
-  // Lender specific fields
+  
   lenderFirstName: string = '';
   lenderLastName: string = '';
   companyName: string = '';
@@ -41,7 +41,7 @@ export class RegisterComponent {
     private router: Router
   ) {}
 
-  // Simple register method
+  
   onRegister() {
     if (!this.userName || !this.email || !this.password) {
       this.error = 'Please fill in all required fields';
@@ -58,7 +58,7 @@ export class RegisterComponent {
       role: this.role
     };
 
-    // Add role-specific details
+    
     if (this.role === 'BORROWER') {
       registerData.borrower = {
         firstName: this.borrowerFirstName,
@@ -83,7 +83,7 @@ export class RegisterComponent {
         this.error = 'Registration successful! Please log in with your credentials.';
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 2000); // Navigate after showing success message
+        }, 2000); 
       },
       error: (error) => {
         this.loading = false;
@@ -141,7 +141,7 @@ export class RegisterComponent {
     }
   }
 
-  // Simple navigation methods
+  
   goToLogin() {
     this.router.navigate(['/login']);
   }

@@ -45,7 +45,7 @@ export class IncomingApplicationsComponent implements OnInit {
     this.loanApplicationService.updateLoanStatus(applicationId, status).subscribe({
       next: (response: any) => {
         this.loading = false;
-        this.loadApplications(); // Refresh the list
+        this.loadApplications(); 
       },
       error: (error: any) => {
         this.loading = false;

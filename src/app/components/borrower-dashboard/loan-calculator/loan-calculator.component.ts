@@ -40,7 +40,7 @@ export class LoanCalculatorComponent implements OnInit {
       this.totalInterest = this.totalAmount - this.loanAmount;
       this.showResults = true;
 
-      // Save calculation to history
+      
       const calculation = {
         id: Date.now(),
         loanAmount: this.loanAmount,
@@ -58,7 +58,7 @@ export class LoanCalculatorComponent implements OnInit {
       this.calculationHistory.unshift(calculation);
       this.selectedCalculation = calculation;
       
-      // Keep only last 10 calculations
+      
       if (this.calculationHistory.length > 10) {
         this.calculationHistory = this.calculationHistory.slice(0, 10);
       }

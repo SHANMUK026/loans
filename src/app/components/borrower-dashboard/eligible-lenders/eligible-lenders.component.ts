@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { BorrowerRequestService } from '../../../services/borrower-request.service';
 import { LenderRulesService } from '../../../services/lender-rules.service';
 import { LoanApplicationService } from '../../../services/loan-application.service';
@@ -20,6 +21,7 @@ export class EligibleLendersComponent implements OnInit {
   showLenders: boolean = false;
   loading: boolean = false;
   error: string = '';
+  currentRequestId: number | null = null;
 
   constructor(
     private borrowerRequestService: BorrowerRequestService,
@@ -49,6 +51,7 @@ export class EligibleLendersComponent implements OnInit {
   findLenders(requestId: number) {
     this.loading = true;
     this.error = '';
+    this.currentRequestId = requestId;
     
     this.loanApplicationService.getEligibleLenders(requestId, 0).subscribe({
       next: (lenders: any[]) => {
@@ -79,21 +82,29 @@ export class EligibleLendersComponent implements OnInit {
       return;
     }
 
+    if (!this.currentRequestId) {
+      this.error = 'No request selected. Please find lenders first.';
+      return;
+    }
+
     this.loading = true;
     this.error = '';
 
-    const applicationData = {
-      ruleIds: this.selectedLenders
-    };
+    
+    const applications = this.selectedLenders.map(ruleId => 
+      this.loanApplicationService.applyForLoan(this.currentRequestId!, ruleId)
+    );
 
-    this.loanApplicationService.createApplication(applicationData).subscribe({
-      next: (response: any) => {
+    
+    forkJoin(applications).subscribe({
+      next: (responses: any[]) => {
         this.loading = false;
         this.showLenders = false;
         this.selectedLenders = [];
-        this.loadMyRequests(); // Refresh requests
+        this.currentRequestId = null;
+        this.loadMyRequests(); 
         this.error = 'Successfully applied to selected lenders!';
-        setTimeout(() => this.error = '', 3000); // Clear success message after 3 seconds
+        setTimeout(() => this.error = '', 3000); 
       },
       error: (error: any) => {
         this.loading = false;

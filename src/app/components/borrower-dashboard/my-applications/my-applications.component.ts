@@ -127,7 +127,7 @@ export class MyApplicationsComponent implements OnInit {
       return;
     }
 
-    // Simple PDF generation using browser's print functionality
+    
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
       alert('Unable to open print window. Please check your browser settings.');

@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  // Simple form data
+  
   userName: string = '';
   password: string = '';
   error: string = '';
@@ -24,7 +24,7 @@ export class LoginComponent {
     private router: Router
   ) {}
 
-  // Simple login method
+  
   onLogin() {
     if (!this.userName || !this.password) {
       this.error = 'Please fill in all fields';
@@ -98,7 +98,7 @@ export class LoginComponent {
     }
   }
 
-  // Simple navigation methods
+  
   goToRegister() {
     this.router.navigate(['/register']);
   }
