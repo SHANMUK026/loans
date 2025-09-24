@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EligibleLender, LoanApplication, MyApplication } from '../models/loan-application.dto';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoanApplicationService {
-  private baseUrl = 'http://localhost:8080/loans';
+  private baseUrl = `${environment.apiBaseUrl}/loans`;
 
   constructor(private http: HttpClient) {}
 

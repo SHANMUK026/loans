@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateRule, RuleResponse } from '../models/lender-rule.dto';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LenderRulesService {
-  private baseUrl = 'http://localhost:8080/lender_rules';
+  private baseUrl = `${environment.apiBaseUrl}/lender_rules`;
 
   constructor(private http: HttpClient) {}
 

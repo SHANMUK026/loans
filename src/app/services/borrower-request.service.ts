@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateRequest, RequestResponse } from '../models/borrower-req.dto';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BorrowerRequestService {
-  private baseUrl = 'http://localhost:8080/borrower_request';
+  private baseUrl = `${environment.apiBaseUrl}/borrower_request`;
 
   constructor(private http: HttpClient) {}
 
