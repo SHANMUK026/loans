@@ -6,6 +6,7 @@
     "start": "ng serve",
     "dev": "ng serve",
     "build": "ng build",
+    "deploy": "wrangler deploy",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:loans": "node dist/loans/server/server.mjs"
