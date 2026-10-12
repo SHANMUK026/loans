@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'loaneligibilitychecker.railway.internal'
+  apiBaseUrl: 'https://loaneligibilitychecker-production.up.railway.app'
 };
